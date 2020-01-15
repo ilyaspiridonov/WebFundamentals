@@ -4,11 +4,11 @@ description: Кастомные элементы позволяют вам бл�
 
 {# wf_updated_on: 2018-09-20 #} {# wf_published_on: 2017-08-14 #} {# wf_blink_components: Blink>DOM #}
 
-# Custom Element Best Practices {: .page-title }
+# Рекомендации по использованию пользовательских элементов {: .page-title}
 
-Custom elements allow you to extend HTML and define your own tags. They're an incredibly powerful feature, but they're also low-level, which means it's not always clear how best to implement your own element.
+Пользовательские элементы позволяют расширять HTML и определять собственные теги. Они невероятно мощные функции, но они также низкоуровневые, что означает, что не всегда понятно, как лучше реализовать свой собственный элемент.
 
-To help you create the best possible experiences we've put together this checklist which breaks down all the things we think it takes to be a well behaved custom element.
+Чтобы помочь вам создать наилучший возможный опыт, мы составили этот контрольный список, в котором разбиты все вещи, которые, по нашему мнению, необходимы для того, чтобы стать хорошим элементом пользовательского элемента.
 
 <style>
   @media screen and (min-width: 1001px) {
@@ -16,18 +16,161 @@ To help you create the best possible experiences we've put together this checkli
   }
 </style>
 
-## Checklist {: #checklist }
+## Контрольный список {: #checklist}
 
-### Shadow DOM {: #shadow-dom }
+### Shadow DOM {: # shadow-dom}
 
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Создайте теневой корень для инкапсуляции стилей. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Инкапсуляция стилей в теневом корне вашего элемента гарантирует, что он будет работать независимо от того, где он используется. Это особенно важно, если разработчик хочет разместить ваш элемент внутри теневого корня другого элемента. Это относится даже к простым элементам, таким как флажок или переключатель. Возможно, единственным контентом внутри вашего теневого корня будут сами стили. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент. </howto-checkbox>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Создайте свой теневой корень в конструкторе. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Конструктор - это когда у вас есть <b>эксклюзивные знания</b> о вашем элементе. Это прекрасное время для настройки деталей реализации, с которыми вы не хотите, чтобы другие элементы возились. Выполнение этой работы в более позднем обратном вызове, таком как <code>connectedCallback</code> , означает, что вам нужно будет защититься от ситуаций, когда ваш элемент отсоединяется и затем присоединяется к документу. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент. </howto-checkbox>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Поместите любые дочерние элементы, которые создает элемент, в его теневой корень. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Дочерние элементы, созданные вашим элементом, являются частью его реализации и должны быть частными. Без защиты теневого корня внешний JavaScript может случайно помешать этим детям. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-tabs> элемент. </howto-tabs>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Установите стиль отображения <code>:host</code> (например, <code>block</code> , <code>inline-block</code> , <code>flex</code> ), если вы не предпочитаете <code>inline</code> по умолчанию. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Пользовательские элементы являются <code>display: inline</code> по умолчанию, поэтому установка их <code>width</code> или <code>height</code> будет иметь никакого эффекта. Это часто бывает неожиданностью для разработчиков и может вызвать проблемы, связанные с выкладкой страницы. Если вы не предпочитаете <code>inline</code> отображение, вы всегда должны устанавливать значение <code>display</code> умолчанию. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент. </howto-checkbox>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Добавьте стиль отображения <code>:host</code> который учитывает скрытый атрибут. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Пользовательский элемент со стилем <code>display</code> умолчанию, например <code>:host { display: block }</code> , переопределит встроенный <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/hidden"><code>hidden</code> атрибут</a> более низкой специфичности. Это может вас удивить, если вы ожидаете установки атрибута <code>hidden</code> для вашего элемента, чтобы он <code>display: none</code> . В дополнение к стилю <code>display</code> умолчанию добавьте поддержку <code>hidden</code> с помощью <code>:host([hidden]) { display: none }</code> . </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент.</howto-checkbox>
+</td>
+</tr>
+</tbody></table> ### Атрибуты и свойства {: # attribute-properties} <table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Не переопределяйте глобальные атрибуты, установленные автором. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Глобальные атрибуты - это те, которые присутствуют во всех элементах HTML. Некоторые примеры включают <code>tabindex</code> и <code>role</code> . Пользовательский элемент может <code>tabindex</code> установить его начальный <code>tabindex</code> 0, чтобы он мог фокусироваться на клавиатуре. Но вы всегда должны сначала проверять, установил ли разработчик, использующий ваш элемент, другое значение. Если, например, они установили <code>tabindex</code> на -1, это сигнал о том, что они не хотят, чтобы элемент был интерактивным. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент. Это дополнительно объясняется в <a href="#dont-override">разделе «Не перезаписывать автора страницы».</a> </howto-checkbox>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Всегда принимайте примитивные данные (строки, числа, логические значения) в качестве атрибутов или свойств. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Пользовательские элементы, такие как их встроенные аналоги, должны быть настраиваемыми. Конфигурация может быть передана декларативно, через атрибуты или обязательно через свойства JavaScript. В идеале каждый атрибут также должен быть связан с соответствующим свойством. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент. </howto-checkbox>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Стремитесь поддерживать примитивные атрибуты данных и свойства в синхронизации, отражая от свойства к атрибуту, и наоборот. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Вы никогда не знаете, как пользователь будет взаимодействовать с вашим элементом. Они могут установить свойство в JavaScript, а затем ожидать чтения этого значения с помощью API, такого как <code>getAttribute()</code> . Если у каждого атрибута есть соответствующее свойство, и оба они отражают, пользователям будет проще работать с вашим элементом. Другими словами, вызов <code>setAttribute('foo', value)</code> также должен установить соответствующее свойство <code>foo</code> и наоборот. Есть, конечно, исключения из этого правила. Вы не должны отражать высокочастотные свойства, например <code>currentTime</code> в видеоплеере. Используйте свое лучшее суждение. Если кажется, что пользователь будет взаимодействовать со свойством или атрибутом, и отражать его не обременительно, сделайте это. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент. Это дополнительно объясняется в <a href="#avoid-reentrancy">Избегать вопросов повторного входа</a> . </howto-checkbox>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Стремитесь принимать только расширенные данные (объекты, массивы) в качестве свойств. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Вообще говоря, нет примеров встроенных элементов HTML, которые принимают расширенные данные (простые объекты JavaScript и массивы) через свои атрибуты. Вместо этого расширенные данные принимаются либо через вызовы методов, либо через свойства. Есть несколько очевидных недостатков при приеме расширенных данных в качестве атрибутов: сериализация большого объекта в строку может быть дорогой, и любые ссылки на объекты будут потеряны в процессе строковой классификации. Например, если вы структурируете объект, который имеет ссылку на другой объект, или, возможно, узел DOM, эти ссылки будут потеряны. </td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Не отражайте богатые свойства данных для атрибутов. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b>/ Б> </td>
+<td> Отражение богатых свойств данных в атрибутах является излишне дорогостоящим, требующим сериализации и десериализации одних и тех же объектов JavaScript. Если у вас нет варианта использования, который может быть решен только с помощью этой функции, вероятно, лучше избегать его. </td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Рассмотрите возможность проверки свойств, которые могли быть установлены до обновления элемента. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Разработчик, использующий ваш элемент, может попытаться установить свойство элемента до его определения. Это особенно верно, если разработчик использует платформу, которая обрабатывает загрузку компонентов, печать их на странице и привязку их свойств к модели. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент. Далее объясняется в <a href="#lazy-properties">разделе Сделать свойства ленивыми</a> . </howto-checkbox>
+</td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Не самостоятельно применять классы. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Элементы, которые должны выражать свое состояние, должны делать это с помощью атрибутов. Атрибут <code>class</code> как правило, считается принадлежащим разработчику, использующему ваш элемент, и запись в него самостоятельно может случайно помешать классам разработчика. </td>
+</tr>
+</tbody></table> ### События <table class="responsive ce-cl"><tbody>
+<tr><th colspan="2"><h3> Отправка событий в ответ на активность внутреннего компонента. </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Ваш компонент может иметь свойства, которые изменяются в ответ на действия, о которых знает только ваш компонент, например, если таймер или анимация завершаются, или ресурс завершает загрузку. Полезно отправлять события в ответ на эти изменения, чтобы уведомить хост о том, что состояние компонента отличается. </td>
+</tr>
+</tbody></table>
+<table class="responsive ce-cl">
+<tbody>
+<tr><th colspan="2"><h3> Не отправляйте события в ответ на настройку свойства хостом (нисходящий поток данных). </h3></th></tr>
+<tr>
+<td> <b>Почему?</b> </td>
+<td> Отправка события в ответ на настройку свойства хостом является излишней (хост знает текущее состояние, потому что он просто установил его). Диспетчеризация событий в ответ на хост, устанавливающий свойство, может вызвать бесконечные циклы в системах привязки данных. </td>
+</tr>
+<tr>
+<td> <b>пример</b> </td>
+<td> <howto-checkbox> элемент.</howto-checkbox>
+</td>     </tr>   </tbody> </table>
 
-<table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2"><h3>Create a shadow root to encapsulate styles.</h3></th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Encapsulating styles in your element's shadow root ensures that it will work   regardless of where it is used. This is especially important if a developer   wishes to place your element inside of another element's shadow root. This   applies to even simple elements like a checkbox or radio button. It might be   the case that the only content inside of your shadow root will be the styles   themselves.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>Create your shadow root in the constructor.</h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   The constructor is when you have <b>exclusive knowledge</b> of your element.   It's a great time to setup implementation details that you don't want other   elements messing around with. Doing this work in a later callback, like the   <code>connectedCallback</code>, means you will need to guard against   situations where your element is detached and then reattached to the document.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>Place any children the element creates into its shadow root.</h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Children created by your element are part of its implementation and should be   private. Without the protection of a shadow root, outside JavaScript may   inadvertently interfere with these children.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-tabs">   <code><howto-tabs></howto-tabs></code></a> element.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Set a <code>:host</code> display style (e.g. <code>block</code>,   <code>inline-block</code>, <code>flex</code>) unless you prefer the default of   <code>inline</code>.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Custom elements are <code>display: inline</code> by default, so setting their   <code>width</code> or <code>height</code> will have no effect. This often   comes as a surprise to developers and may cause issues related to   laying out the page. Unless you prefer an <code>inline</code> display, you   should always set a default <code>display</code> value.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Add a <code>:host</code> display style that respects the hidden attribute.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   A custom element with a default <code>display</code> style, e.g.   <code>:host { display: block }</code>, will override the lower specificity   built-in   <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/hidden">   <code>hidden</code> attribute</a>.   This may surprise you if you expect setting the <code>hidden</code>   attribute on your element to render it <code>display: none</code>. In addition   to a default <code>display</code> style, add support for <code>hidden</code>   with <code>:host([hidden]) { display: none }</code>.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element.       </td>     </tr>   </tbody> </table> ### Attributes and properties {: #attributes-properties } <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Do not override author-set, global attributes.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Global attributes are those that are present on all HTML elements. Some   examples include <code>tabindex</code> and <code>role</code>. A custom element   may wish to set its initial <code>tabindex</code> to 0 so it will be keyboard   focusable. But you should always check first to see if the developer using   your element has set this to another value. If, for example, they've set   <code>tabindex</code> to -1, it's a signal that they don't wish for the   element to be interactive.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element. This is further explained in   <a href="#dont-override">Don't override the page author.       </a> </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Always accept primitive data (strings, numbers, booleans) as either attributes   or properties.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Custom elements, like their built-in counterparts, should be configurable.   Configuration can be passed in declaratively, via attributes, or imperatively   via JavaScript properties. Ideally every attribute should also be linked to   a corresponding property.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Aim to keep primitive data attributes and properties in sync, reflecting from   property to attribute, and vice versa.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   You never know how a user will interact with your element. They might   set a property in JavaScript, and then expect to read that value   using an API like <code>getAttribute()</code>. If every attribute has a   corresponding property, and both of them reflect, it will make it easier for   users to work with your element. In other words, calling   <code>setAttribute('foo', value)</code> should also set a corresponding   <code>foo</code> property and vice versa. There are, of course, exceptions to   this rule. You shouldn't reflect high frequency properties, e.g.   <code>currentTime</code> in a video player. Use your best judgment. If it   seems like a user will interact with a property or attribute, and   it's not burdensome to reflect it, then do so.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element. This is further explained in   <a href="#avoid-reentrancy">Avoid reentrancy issues</a>.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Aim to only accept rich data (objects, arrays) as properties.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Generally speaking, there are no examples of built-in HTML elements that   accept rich data (plain JavaScript objects and arrays) through their   attributes. Rich data is instead accepted either through method calls or   properties. There are a couple obvious downsides to accepting rich data as   attributes: it can be expensive to serialize a large object to a string, and   any object references will be lost in this stringification process. For   example, if you stringify an object which has a reference to another object,   or perhaps a DOM node, those references will be lost.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Do not reflect rich data properties to attributes.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Reflecting rich data properties to attributes is needlessly expensive,   requiring serializing and deserializing the same JavaScript objects. Unless   you have a use case that can only be solved with this feature, it's probably   best to avoid it.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Consider checking for properties that may have been set before the element   upgraded.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   A developer using your element may attempt to set a property on the element   before its definition has been loaded. This is especially true if the   developer is using a framework which handles loading components, stamping them   to the page, and binding their properties to a model.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element. Further explained in   <a href="#lazy-properties">Make properties lazy</a>.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Do not self-apply classes.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Elements that need to express their state should do so using attributes. The   <code>class</code> attribute is generally considered to be owned by the   developer using your element, and writing to it yourself may inadvertently   stomp on developer classes.       </td>     </tr>   </tbody> </table> ### Events <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Dispatch events in response to internal component activity.         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Your component may have properties that change in response to activity that   only your component knows about, for example, if a timer or animation   completes, or a resource finishes loading. It's helpful to dispatch events   in response to these changes to notify the host that the component's state is   different.       </td>     </tr>   </tbody> </table> <table class="responsive ce-cl">   <tbody>     <tr>       <th colspan="2">         <h3>   Do not dispatch events in response to the host setting a property (downward   data flow).         </h3>       </th>     </tr>     <tr>       <td><b>Why?</b></td>       <td>   Dispatching an event in response to a host setting a property is superfluous   (the host knows the current state because it just set it). Dispatching events   in response to a host setting a property may cause infinite loops with data   binding systems.       </td>     </tr>     <tr>       <td><b>Example</b></td>       <td>   The <a href="/web/fundamentals/architecture/building-components/examples/howto-checkbox">   <code><howto-checkbox></howto-checkbox></code></a> element.       </td>     </tr>   </tbody> </table>
+## Explainers {: #explainers}
 
-## Explainers {: #explainers }
+### Не переопределяйте автора страницы {: # dont-override}
 
-### Don't override the page author {: #dont-override }
-
-It's possible that a developer using your element might want to override some of its initial state. For example, changing its ARIA `role` or focusability with `tabindex`. Check to see if these and any other global attributes have been set, before applying your own values.
+Возможно, что разработчик, использующий ваш элемент, может захотеть переопределить некоторые из его начального состояния. Например, изменение его `role` ARIA или фокусируемости с помощью `tabindex` . Проверьте, установлены ли эти и любые другие глобальные атрибуты, прежде чем применять свои собственные значения.
 
 ```js
 connectedCallback() {
@@ -37,17 +180,17 @@ connectedCallback() {
     this.setAttribute('tabindex', 0);
 ```
 
-### Make properties lazy {: #lazy-properties }
+### Сделать свойства ленивыми {: # lazy-properties}
 
-A developer might attempt to set a property on your element before its definition has been loaded. This is especially true if the developer is using a framework which handles loading components, inserting them into to the page, and binding their properties to a model.
+Разработчик может попытаться установить свойство для вашего элемента до его определения. Это особенно верно, если разработчик использует платформу, которая обрабатывает загрузку компонентов, вставку их на страницу и привязку их свойств к модели.
 
-In the following example, Angular is declaratively binding its model's `isChecked` property to the checkbox's `checked` property. If the definition for howto-checkbox was lazy loaded it's possible that Angular might attempt to set the checked property before the element has upgraded.
+В следующем примере, Угловой является декларативно связывающей ее моделью `isChecked` свойства с флажком в `checked` имущество. Если определение для howto-checkbox было загружено с отложенной загрузкой, возможно, что Angular попытается установить свойство selected перед обновлением элемента.
 
 ```html
 <howto-checkbox [checked]="defaults.isChecked"></howto-checkbox>
 ```
 
-A custom element should handle this scenario by checking if any properties have already been set on its instance. The [`<howto-checkbox>`](/web/fundamentals/architecture/building-components/examples/howto-checkbox) demonstrates this pattern using a method called `_upgradeProperty()`.
+Пользовательский элемент должен обрабатывать этот сценарий, проверяя, установлены ли какие-либо свойства в его экземпляре. [`<howto-checkbox>`](/web/fundamentals/architecture/building-components/examples/howto-checkbox) демонстрирует этот шаблон, используя метод с именем `_upgradeProperty()` .
 
 ```js
 connectedCallback() {
@@ -64,11 +207,11 @@ _upgradeProperty(prop) {
 }
 ```
 
-`_upgradeProperty()` captures the value from the unupgraded instance and deletes the property so it does not shadow the custom element's own property setter. This way, when the element's definition does finally load, it can immediately reflect the correct state.
+`_upgradeProperty()` захватывает значение из экземпляра без обновления и удаляет свойство, чтобы оно не скрывало собственный установщик свойств пользовательского элемента. Таким образом, когда определение элемента наконец загружается, оно может сразу же отобразить правильное состояние.
 
-### Avoid reentrancy issues {: #avoid-reentrancy }
+### Избегайте вопросов повторного входа {: # избежать повторного входа}
 
-It's tempting to use the `attributeChangedCallback()` to reflect state to an underlying property, for example:
+Соблазнительно использовать `attributeChangedCallback()` чтобы отразить состояние для базового свойства, например:
 
 ```js
 // When the [checked] attribute changes, set the checked property to match.
@@ -78,7 +221,7 @@ attributeChangedCallback(name, oldValue, newValue) {
 }
 ```
 
-But this can create an infinite loop if the property setter also reflects to the attribute.
+Но это может создать бесконечный цикл, если установщик свойств также отражает атрибут.
 
 ```js
 set checked(value) {
@@ -92,7 +235,7 @@ set checked(value) {
 }
 ```
 
-An alternative is to allow the property setter to reflect to the attribute, and have the getter determine its value based on the attribute.
+Альтернатива состоит в том, чтобы позволить установщику свойства отражать атрибут, и заставить получателя определять его значение на основе атрибута.
 
 ```js
 set checked(value) {
@@ -108,9 +251,9 @@ get checked() {
 }
 ```
 
-In this example, adding or removing the attribute will also set the property.
+В этом примере добавление или удаление атрибута также установит свойство.
 
-Finally, the `attributeChangedCallback()` can be used to handle side effects like applying ARIA states.
+Наконец, `attributeChangedCallback()` может использоваться для обработки побочных эффектов, таких как применение состояний ARIA.
 
 ```js
 attributeChangedCallback(name, oldValue, newValue) {
@@ -126,6 +269,6 @@ attributeChangedCallback(name, oldValue, newValue) {
 }
 ```
 
-## Feedback {: #feedback }
+## Обратная связь {: #feedback}
 
-{% include "web/_shared/helpful.html" %}
+{% include "web / _shared / полезно.html"%}
