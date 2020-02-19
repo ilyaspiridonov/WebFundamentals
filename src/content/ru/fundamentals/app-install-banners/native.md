@@ -4,7 +4,7 @@ project_path: /web/fundamentals/_project.yaml book_path: /web/fundamentals/_book
 
 # Запрос установки собственного приложения {: .page-title}
 
-The native app install prompt gives you the ability to let users quickly and seamlessly install your native app on their device directly from the app store, without leaving the browser, and without showing an annoying interstitial.
+Приглашение  к установке собственного приложения позволяет пользователям быстро и без проблем установить ваше собственное приложение на свое устройство прямо из магазина приложений, не покидая браузер и не показывая раздражающую вставку.
 
 ## Каковы критерии? {: # критерии}
 
