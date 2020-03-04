@@ -169,4 +169,4 @@ Attention: Chrome a un flux d'installation légèrement différent pour le burea
 
 ### Est-ce que `beforeinstallprompt` sera déclenché?
 
-The easiest way to test if the `beforeinstallprompt` event will be fired, is to use [Lighthouse](/web/tools/lighthouse/) to audit your app, and check the results of the [User Can Be Prompted To Install The Web App](/web/tools/lighthouse/audits/install-prompt) test.
+Le moyen le plus simple de tester si l'événement `beforeinstallprompt` sera déclenché consiste à utiliser [Lighthouse](/web/tools/lighthouse/) pour auditer votre application et vérifier les résultats du test de l' [utilisateur peut être invité à installer l'application Web](/web/tools/lighthouse/audits/install-prompt).<br>Test string<br>Test string 2
