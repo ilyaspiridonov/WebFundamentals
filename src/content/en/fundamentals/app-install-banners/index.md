@@ -17,6 +17,8 @@ or [desktop device](/web/progressive-web-apps/desktop). After the user
 accepts the prompt, your PWA will be added to their launcher, and it will run
 like any other installed app.
 
+It's common to save and load a model during training. There are two sets of APIs for saving and loading a keras model: a high-level API, and a low-level API. This tutorial demonstrates how you can use the SavedModel APIs when using `tf.distribute.Strategy`. To learn about SavedModel and serialization in general, please read the [saved model guide](../../guide/saved_model.ipynb), and the [Keras model serialization guide](../../guide/keras/save_and_serialize.ipynb). Let's start with a simple example:
+
 Chrome handles most of the heavy lifting for you:
 
 * On mobile, Chrome will generate a
